@@ -1,4 +1,4 @@
-
+import { useEffect, useState } from "react";
 import "./App.css";
 import ReaditDetail from "./ReaditDetail";
 
@@ -39,7 +39,23 @@ const projects = [
 ];
 
 function App() {
-  if (window.location.pathname === "/my-portfolio/readit") {
+  const [currentHash, setCurrentHash] = useState(
+    window.location.hash
+  );
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentHash(window.location.hash);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
+  if (currentHash === "#/readit") {
     return <ReaditDetail />;
   }
 
@@ -111,49 +127,56 @@ function App() {
           <span className="project-count">02 PROJECTS</span>
         </div>
 
+        
         <div className="project-grid">
           {projects.map((project) => (
-            <a
-              className={`project-card ${project.className}`}
-              key={project.number}
-              href={project.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div className="project-visual">
-                <span className="visual-number">{project.number}</span>
-                <span className="visual-symbol" aria-hidden="true">
-                  {project.symbol}
-                </span>
-                <span className="visual-label">
-                  {project.name}
-                </span>
-              </div>
-
-              <div className="project-meta">
-                <div>
-                  <span className="eyebrow">{project.category}</span>
-                  <h3>{project.name}</h3>
-                </div>
-                <span className="project-arrow" aria-hidden="true">
-                  ↗
-                </span>
-              </div>
-
-              <p className="project-description">
-                {project.description}
-              </p>
-
-              <div className="tag-list">
-                {project.tags.map((tag) => (
-                  <span className="tag" key={tag}>
-                    {tag}
+            <div className="project-item" key={project.number}>
+              <a
+                className={`project-card ${project.className}`}
+                href={project.url.trim()}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div className="project-visual">
+                  <span className="visual-number">{project.number}</span>
+                  <span className="visual-symbol" aria-hidden="true">
+                    {project.symbol}
                   </span>
-                ))}
-              </div>
-            </a>
+                  <span className="visual-label">{project.name}</span>
+                </div>
+
+                <div className="project-meta">
+                  <div>
+                    <span className="eyebrow">{project.category}</span>
+                    <h3>{project.name}</h3>
+                  </div>
+                  <span className="project-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </div>
+
+                <p className="project-description">
+                  {project.description}
+                </p>
+
+                <div className="tag-list">
+                  {project.tags.map((tag) => (
+                    <span className="tag" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
+
+              {project.name === "Read-it" && (
+                <a className="project-detail-link" href="#/readit">
+                  상세 사례 보기 <span>↗</span>
+                </a>
+              )}
+            </div>
           ))}
         </div>
+
       </section>
 
       
