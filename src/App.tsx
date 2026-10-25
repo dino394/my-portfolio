@@ -1,5 +1,6 @@
 
 import "./App.css";
+import ReaditDetail from "./ReaditDetail";
 
 const projects = [
   {
@@ -38,6 +39,10 @@ const projects = [
 ];
 
 function App() {
+  if (window.location.pathname === "/my-portfolio/readit") {
+    return <ReaditDetail />;
+  }
+
   return (
     <main>
       <header className="site-header">
